@@ -1,18 +1,26 @@
 import { Helmet } from 'react-helmet-async';
+import { useLocation } from 'react-router-dom';
 
 const SITE_URL = 'https://tilldawndrivingacademy.com';
 const SITE_NAME = 'Till Dawn Driving Academy';
+const DEFAULT_IMAGE = '/gallery/academy-sign.png';
 
 export default function SEO({
   title,
   description,
   keywords = '',
-  image = '/till-dawn-logo.png',
+  image = DEFAULT_IMAGE,
 }) {
+  const location = useLocation();
+
   const fullTitle = title
     ? `${title} | ${SITE_NAME}`
     : SITE_NAME;
 
+  // Build the correct URL for the current page
+  const currentUrl = `${SITE_URL}${location.pathname}`;
+
+  // Convert relative image paths into absolute URLs
   const imageUrl = image.startsWith('http')
     ? image
     : `${SITE_URL}${image}`;
@@ -44,18 +52,13 @@ export default function SEO({
         content="Till Dawn Driving Academy"
       />
 
-      <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-      />
-
       {/* Canonical URL */}
       <link
         rel="canonical"
-        href={SITE_URL}
+        href={currentUrl}
       />
 
-      {/* Open Graph */}
+      {/* Open Graph / WhatsApp / Facebook */}
       <meta
         property="og:title"
         content={fullTitle}
@@ -73,7 +76,7 @@ export default function SEO({
 
       <meta
         property="og:url"
-        content={SITE_URL}
+        content={currentUrl}
       />
 
       <meta
@@ -86,7 +89,17 @@ export default function SEO({
         content={imageUrl}
       />
 
-      {/* Twitter / Social Sharing */}
+      <meta
+        property="og:image:alt"
+        content="Till Dawn Driving Academy"
+      />
+
+      <meta
+        property="og:locale"
+        content="en_NG"
+      />
+
+      {/* Twitter / X */}
       <meta
         name="twitter:card"
         content="summary_large_image"
